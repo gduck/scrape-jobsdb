@@ -1,0 +1,13 @@
+<h1><%= company.name %></h1>
+
+<table>
+  <tbody>
+    <% company.jobs.each do |job |%>
+      <tr>
+        <td><%= job.position_name %></td>
+        <td></td>
+      </tr>
+    <% end %>
+  </tbody>
+
+</table>

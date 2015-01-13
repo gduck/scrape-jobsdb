@@ -1,0 +1,13 @@
+<h2><%= company.name %></h1>
+
+<table class="table table-condensed">
+  <tbody>
+    <% company.jobs.each do |job |%>
+      <tr>
+        <td>Position: <%= job.position_name %><br>
+        About: <%= job.position_about %></td>
+      </tr>
+    <% end %>
+  </tbody>
+
+</table>
