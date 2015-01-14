@@ -4,8 +4,18 @@
   <tbody>
     <% company.jobs.each do |job |%>
       <tr>
-        <td>Position: <%= job.position_name %><br>
-        About: <%= job.position_about %></td>
+        <td>
+          Position: <%= "#{job.position_name}" %><br>
+          ID: <%= "#{job.jobsdb_id}"  %><br>
+          About:
+          <ul> 
+            <% job.position_about['desc'] %>
+            <% job.position_about['desc'].each do |desc| %>             
+                <li><%= desc %></li>
+            <% end %>
+          </ul>
+          <!-- About: <%#= simple_format job.position_about.gsub(/\n/, '<br>') %> -->
+        </td>
       </tr>
     <% end %>
   </tbody>

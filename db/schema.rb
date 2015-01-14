@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20150113062208) do
 
   create_table "jobs", force: true do |t|
     t.integer  "company_id"
+    t.integer  "jobsdb_id"
     t.string   "position_name"
     t.string   "position_type"
     t.integer  "monthly_salary"
