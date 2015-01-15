@@ -2,7 +2,7 @@ class CompaniesController < ApplicationController
 
 
   def index
-    @companies = Company.all.order(name: :asc)
+    @companies = Company.search(params[:search]).order(name: :asc)
   end
 
   def show
