@@ -7,7 +7,6 @@ namespace :scrape do
 
     # approx 37300 jobs
     url = "http://hk.jobsdb.com/HK/EN/Search/FindJobs?KeyOpt=COMPLEX&JSRV=1&RLRSF=1&JobCat=1"
-    
 
     scrape_this_url(url)
   end
@@ -89,13 +88,13 @@ namespace :scrape do
       # JOB DESCRIPTION STUFF
       current_job_description_array = job_description[counter].css('li')
 
-      new_fukn_array = []
+      hash_array = []
       current_job_description_array.each do |item|
-        new_fukn_array.push(item.text)
+        hash_array.push(item.text)
       end
-      #puts new_fukn_array
+      #puts hash_array
 
-      current_job.position_about = {'desc' => new_fukn_array}
+      current_job.position_about = {'desc' => hash_array}
  
       puts current_job.position_about
       current_job.save
@@ -106,7 +105,6 @@ namespace :scrape do
     # recursively call this function again until no more next links
     button_next_format = ".pagebox-next"
     next_url = html_doc.css(button_next_format)
-    #puts next_url
 
     if next_url.any?
       next_url = next_url[0]['href']
