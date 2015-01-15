@@ -24,10 +24,11 @@ ActiveRecord::Schema.define(version: 20150113062208) do
     t.integer  "company_id"
     t.string   "jobsdb_id"
     t.string   "position_name"
+    t.text     "position_about"
+    t.date     "posted_when"
     t.string   "position_type"
     t.integer  "monthly_salary"
     t.string   "location"
-    t.text     "position_about"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

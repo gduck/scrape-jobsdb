@@ -4,6 +4,8 @@ namespace :scrape do
 
     require 'open-uri'
     require 'nokogiri'
+    require 'date'
+
 
     # approx 37300 jobs
     url = "http://hk.jobsdb.com/HK/EN/Search/FindJobs?KeyOpt=COMPLEX&JSRV=1&RLRSF=1&JobCat=1"
@@ -33,6 +35,11 @@ namespace :scrape do
 
     data_job_id = "div.result-sherlock-cell"
     job_id = html_doc.css(data_job_id)
+
+    data_job_date = "div.job-quickinfo > meta"
+    # <meta itemprop="datePosted" content="15-Jan-15">
+    # $('div.job-quickinfo > meta')[0].content
+    job_date = html_doc.css(data_job_date)
 
     puts "Number of jobs this page #{job_details.count}"
     #puts job_details.count
@@ -83,7 +90,17 @@ namespace :scrape do
         current_job_id.gsub!('Row', '')
         puts current_job_id
       
-      current_job = current_company.jobs.new(position_name: job_details[counter].text, position_about: "", jobsdb_id: current_job_id)
+      # DATE STUFF
+      #require 'date'
+      puts "date node object is #{job_date[counter]}"
+      puts "date string is #{job_date[counter]['content']}"
+      # date = job_date[counter]['content'].to_time.strftime('%d-%b-%y')
+      puts "#{job_date[counter]['content']}"
+      date = DateTime.strptime(job_date[counter]['content'], '%d-%b-%y')
+      #puts "date object is #{date}"
+      #formatted_date = date.strftime('%a %b %d %H:%M:%S %Z %Y')
+
+      current_job = current_company.jobs.new(position_name: job_details[counter].text, position_about: "", jobsdb_id: current_job_id, posted_when: date)
       
       # JOB DESCRIPTION STUFF
       current_job_description_array = job_description[counter].css('li')
