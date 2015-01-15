@@ -5,7 +5,7 @@ class Company < ActiveRecord::Base
   def self.search(search)
     if search
       # this gets only users with company associations
-      where('companies.name LIKE ?', "%#{search}%")
+      where('lower(companies.name) LIKE ?', "%#{search.downcase}%")
     else
       all
     end

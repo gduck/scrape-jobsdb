@@ -10,9 +10,11 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-
-  <%= render 'layouts/searchbar', :search_path => companies_path %>
-  <%= yield %>
-
+  <div class="container">
+    <%= render 'layouts/searchbar', :search_path => companies_path %>
+  </div>
+  <div class="container">
+    <%= yield %>
+  </div>
 </body>
 </html>

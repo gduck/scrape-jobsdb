@@ -1,28 +1,29 @@
-h2 
-  == company.name
+div.container
+  h2 
+    == company.name
 
-table.table.table-condensed
-  thead
-    tr
-      th.not-wide Position:
-      th.not-wide ID:
-      th Posted:
-      th Desc:
-  tbody 
-    - for job in company.jobs
+  table.table.table-condensed.table-striped
+    thead
       tr
-        td
-          |
-          == job.position_name
-        td
-          |
-          == job.jobsdb_id
-        td
-          |
-          == job.posted_when
-        td
-          | About:
-          ul
-            - for desc in job.position_about['desc']
-              li 
-                == desc
+        th.not-wide Position:
+        th ID:
+        th.min-width Posted:
+        th Desc:
+    tbody 
+      - for job in company.jobs
+        tr
+          td
+            |
+            == job.position_name
+          td
+            |
+            == job.jobsdb_id
+          td
+            |
+            == job.posted_when
+          td
+            | About:
+            ul
+              - for desc in job.position_about['desc']
+                li 
+                  == desc
