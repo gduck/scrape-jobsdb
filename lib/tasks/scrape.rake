@@ -52,7 +52,7 @@ namespace :scrape do
     # counter_for_id because some cells don't have job data
     counter = 0
     counter_for_id = counter
-    
+
     new_company_array = []
     new_job_array = []
 
@@ -93,12 +93,11 @@ namespace :scrape do
       # a number of <li>html</li> (usually 3 of)
       current_job_description_array = job_description[counter].css('li')
 
-      hash_array = []
+      desc_array = []
       current_job_description_array.each do |item|
-        hash_array.push(item.text)
+        desc_array.push(item.text)
       end
-
-      current_job.position_about = {'desc' => hash_array}
+      current_job.position_about = desc_array
  
       puts current_job.position_about
       current_job.save
