@@ -6,15 +6,13 @@ namespace :scrape do
     require 'nokogiri'
     require 'date'
 
-
-    # approx 37300 jobs
+    # approx 37000 jobs
     url = "http://hk.jobsdb.com/HK/EN/Search/FindJobs?KeyOpt=COMPLEX&JSRV=1&RLRSF=1&JobCat=1"
 
     scrape_this_url(url)
   end
 
   def scrape_this_url(url)
-
     if Job.all.count >= 1000
       return
     end
@@ -28,22 +26,16 @@ namespace :scrape do
     data_job_title = "div > div > div > h3 > a"
     job_details = html_doc.css(data_job_title)
 
-    # get all 3 description items together to tie with the job
     data_job_description = "div > div > div > ul"
-    # data_job_description = "div > div > div > ul > li"
     job_description = html_doc.css(data_job_description)
 
     data_job_id = "div.result-sherlock-cell"
     job_id = html_doc.css(data_job_id)
 
     data_job_date = "div.job-quickinfo > meta"
-    # <meta itemprop="datePosted" content="15-Jan-15">
-    # $('div.job-quickinfo > meta')[0].content
     job_date = html_doc.css(data_job_date)
 
     puts "Number of jobs this page #{job_details.count}"
-    #puts job_details.count
-    #puts job_description.count
     if !company_details.any?
       puts "no company_details error "
       # put some error message here
@@ -57,14 +49,14 @@ namespace :scrape do
     end
 
     # first fill the db with companies
+    # counter_for_id because some cells don't have job data
     counter = 0
-    # there are 3 description lines for each job/ company
     counter_for_id = counter
+    
     new_company_array = []
     new_job_array = []
 
     while counter < company_details.count do 
-      puts ""
       puts "the company details are #{company_details[counter].text}"
       puts "checking if company exists in the array already - "
       puts new_company_array.include?(company_details[counter].text)
@@ -77,8 +69,6 @@ namespace :scrape do
 
       puts job_details[counter].text
       current_company = Company.find_by_name(company_details[counter].text)
-      #puts "current company is " + current_company.name
-      
 
       #if the id is null, it's advertising and we need to do the next one
       current_job_id = job_id[counter_for_id]['id']
@@ -94,22 +84,19 @@ namespace :scrape do
       #require 'date'
       puts "date node object is #{job_date[counter]}"
       puts "date string is #{job_date[counter]['content']}"
-      # date = job_date[counter]['content'].to_time.strftime('%d-%b-%y')
       puts "#{job_date[counter]['content']}"
       date = DateTime.strptime(job_date[counter]['content'], '%d-%b-%y')
-      #puts "date object is #{date}"
-      #formatted_date = date.strftime('%a %b %d %H:%M:%S %Z %Y')
 
       current_job = current_company.jobs.new(position_name: job_details[counter].text, position_about: "", jobsdb_id: current_job_id, posted_when: date)
       
       # JOB DESCRIPTION STUFF
+      # a number of <li>html</li> (usually 3 of)
       current_job_description_array = job_description[counter].css('li')
 
       hash_array = []
       current_job_description_array.each do |item|
         hash_array.push(item.text)
       end
-      #puts hash_array
 
       current_job.position_about = {'desc' => hash_array}
  
